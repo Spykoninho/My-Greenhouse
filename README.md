@@ -21,9 +21,9 @@ See below for your preferred option.
 Before any install, you need to clone the project
 
 ```bash
-git clone https://github.com/chatelet69/OpenDex.git
+git clone https://github.com/Spykoninho/My-Greenhouse.git
 or via SSH
-git clone git@github.com:chatelet69/OpenDex.git
+git clone git@github.com:Spykoninho/My-Greenhouse.git
 ```
 
 ### Docker Container
@@ -58,7 +58,7 @@ npm run install_libs
 npm start
 ```
 
-You can also manually launch the api and the front end separately by executing the following command in each folder `/api` and `/opendex_front`
+You can also manually launch the api and the front end separately by executing the following command in each folder `/api` and `/front`
 
 ```bash
 npm start
@@ -66,7 +66,7 @@ npm start
 
 #### Build the React Frontend App
 
-In `/opendex_front`
+In `/front`
 
 ```bash
 npm run build
