@@ -3,14 +3,14 @@ services:
   db:
     image: mariadb:latest
     restart: always
-    volumes:
-      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./db/data:/var/lib/mysql
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_PWD}
       - MARIADB_USER=${DB_USER}
       - MARIADB_PASSWORD=${DB_USER_PWD}
       - MYSQL_DATABASE=my_greenhouse
+    volumes:
+      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/data:/var/lib/mysql
     ports:
       - ${DB_PORT}
     container_name: my_greenhouse_db
@@ -39,3 +39,6 @@ services:
       dockerfile: Dockerfile
     networks:
       - my_greenhouse_network
+
+networks:
+  atdprod:
