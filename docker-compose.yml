@@ -41,4 +41,4 @@ services:
       - my_greenhouse_network
 
 networks:
-  atdprod:
+  my_greenhouse_network:
