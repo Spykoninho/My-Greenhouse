@@ -1,0 +1,21 @@
+name: Deploy
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:       
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ./My-Greenhouse
+          git pull origin main
+          ./install-build-projects.sh
+          docker-compose up -d --build
