@@ -1,0 +1,44 @@
+version: '3'
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_PWD}
+      - MARIADB_USER=${DB_USER}
+      - MARIADB_PASSWORD=${DB_USER_PWD}
+      - MYSQL_DATABASE=my_greenhouse
+    volumes:
+      - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/data:/var/lib/mysql
+    ports:
+      - ${DB_PORT}
+    container_name: my_greenhouse_db
+    networks:
+      - my_greenhouse_network
+
+  api:
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - DB_HOST="my_greenhouse_network"
+      - DB_USER=${DB_USER}
+      - DB_USER_PWD=${DB_USER_PWD}
+      - DB_DATABASE="my_greenhouse"
+    volumes:
+      - ./api/src/:/app/src
+      - ./api/.env:/app/.env
+      - ./api/index.js:/app/index.js
+      - ./api/package.json:/app/package.json
+    ports:
+      - ${API_PORT}
+    container_name: my_greenhouse_api
+    build:
+      context: api
+      dockerfile: Dockerfile
+    networks:
+      - my_greenhouse_network
+
+networks:
+  my_greenhouse_network:

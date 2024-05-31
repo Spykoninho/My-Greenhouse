@@ -1,0 +1,2 @@
+cd ./api/
+npm install
