@@ -29,5 +29,9 @@ app.listen(port, ()=>{
 })
 
 router.get('/', (req, res)=>{
-    res.status(200).json({message:'Hello World !'})
+    res.status(200).json({message:'Welcome to the My Greenhouse\'s API !'})
+})
+
+router.all('/*', (req, res)=>{
+    res.status(400).json({error:'Error wrong route'})
 })
