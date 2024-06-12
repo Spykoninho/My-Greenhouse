@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "nodemon --env-file=.env index.js ",
+    "dev": "nodemon --env-file=.env index.js ",
     "start": "node --env-file=.env index.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Spykoninho/My-Greenhouse#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.3.0",

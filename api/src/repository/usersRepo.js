@@ -19,10 +19,10 @@ class UsersRepo{
         }
     }
 
-    async signInRepo(email, password, username, newsletter){
-        const sqlQuery = "INSERT INTO user (email, password, username, newsletter) VALUES (?, ?, ?, ?) RETURNING id";
-        let resDb = await this.executeQuery(sqlQuery, [email, password, username, newsletter])
-        console.log(resDb)
+    async signInRepo(email, password, username, newsletter, salt, insee_code){
+        const sqlQuery = "INSERT INTO user (email, password, username, newsletter, salt, insee_code) VALUES (?, ?, ?, ?, ?, ?) RETURNING id, email, username";
+        let resDb = await this.executeQuery(sqlQuery, [email, password, username, newsletter, salt, insee_code])
+        return resDb
     }
 }
 

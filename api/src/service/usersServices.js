@@ -1,16 +1,27 @@
+var jsonwebtoken = require('jsonwebtoken');
 const usersRepo = require('../repository/usersRepo')
+const utilService = require('./utilService')
 class UsersService{
     repo;
+    util;
     constructor(){
         this.repo = new usersRepo();
+        this.util = new utilService();
     }
     
     async signInService(body){
         try {
-            let resDb = await this.repo.signInRepo(body.email, body.password, body.username, body.newsletter)
-            return resDb
+            if(!body.email || !body.password || !body.username || !body.newsletter || !body.postal_code) return {error: "Body incomplet"}
+            if(!this.util.checkEmail(body.email) || !this.util.checkPwd(body.password) || body.username.length>255 || !this.util.checkNewsletter(body.newsletter) || !this.util.checkPostalCode(body.postal_code) || !this.util.checkPostalCode(body.postal_code)) return {error: "Données invalides"}
+            let salt = this.util.createSalt()
+            let hashedPwd = this.util.hashPwd(body.password, salt)
+            let inseeCode = await this.util.getInseeByPostal(body.postal_code)
+            let resDb = await this.repo.signInRepo(body.email, hashedPwd, body.username, body.newsletter, salt, inseeCode)
+            if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT, {expiresIn: '30d'})}
+            else return {error: "Une erreur est survenue durant la récupération de votre ID"}
         } catch (error) {
             console.log(error)
+            return {error: "Une erreur est survenue durant l'inscription"}
         }
     }
 }
