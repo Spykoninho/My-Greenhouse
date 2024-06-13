@@ -12,7 +12,8 @@ class UsersService{
     async signInService(body){
         try {
             if(!body.email || !body.password || !body.username || !body.newsletter || !body.postal_code) return {error: "Body incomplet"}
-            if(!this.util.checkEmail(body.email) || !this.util.checkPwd(body.password) || body.username.length>255 || !this.util.checkNewsletter(body.newsletter) || !this.util.checkPostalCode(body.postal_code)) return {error: "Données invalides"}
+            if(!this.util.checkEmail(body.email) || body.username.length>255 || !this.util.checkNewsletter(body.newsletter) || !this.util.checkPostalCode(body.postal_code)) return {error: "Données invalides"}
+            if(!this.util.checkPwd(body.password)) return {error: "Mot de passe trop faible"}
             let salt = this.util.createSalt()
             let hashedPwd = this.util.hashPwd(body.password, salt)
             let inseeCode = await this.util.getInseeByPostal(body.postal_code)
