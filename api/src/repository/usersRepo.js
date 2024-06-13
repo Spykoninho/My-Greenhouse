@@ -24,6 +24,18 @@ class UsersRepo{
         let resDb = await this.executeQuery(sqlQuery, [email, password, username, newsletter, salt, insee_code])
         return resDb
     }
+
+    async logInRepo(username, password){
+        const sqlQuery = "SELECT id, email, username FROM user WHERE (email = ? OR username = ?) AND password = ?";
+        let resDb = await this.executeQuery(sqlQuery, [username, username, password])
+        return resDb
+    }
+
+    async getUserByLogin(login){
+        const sqlQuery = "SELECT * FROM user WHERE email = ? OR username = ?";
+        let resDb = await this.executeQuery(sqlQuery, [login, login])
+        return resDb
+    }
 }
 
 module.exports = UsersRepo
