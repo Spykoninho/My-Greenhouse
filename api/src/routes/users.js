@@ -5,6 +5,6 @@ const UsersController = new usersController()
 
 router.post('/api/signIn', UsersController.signIn)
 
-router.get('/api/login', UsersController.logIn)
+router.post('/api/login', UsersController.logIn)
 
 module.exports = router

@@ -19,7 +19,7 @@ class UsersService{
             let inseeCode = await this.util.getInseeByPostal(body.postal_code)
             let resDb = await this.repo.signInRepo(body.email, hashedPwd, body.username, body.newsletter, salt, inseeCode)
             if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT, {expiresIn: '30d'})}
-            else return {error: "Une erreur est survenue durant la récupération de votre ID"}
+            else return {error: "Erreur, identifiant déjà utilisé"}
         } catch (error) {
             console.log(error)
             return {error: "Une erreur est survenue durant l'inscription"}

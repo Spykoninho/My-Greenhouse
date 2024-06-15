@@ -13,7 +13,8 @@ class UsersRepo{
             const rows = await connection.query(query, params)
             return rows
         } catch (error) {
-            throw error
+            console.log(error)
+            return false
         }finally{
             if(connection) connection.release();
         }
