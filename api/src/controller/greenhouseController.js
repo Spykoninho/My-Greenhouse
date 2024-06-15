@@ -25,6 +25,7 @@ class GreenhouseController{
             else res.status(200).json({message: "Serre ajoutée !"})
             */
            console.log("ok")
+           res.status(200).json({message: "Serre ajoutée avec succès !"})
         } catch (error) {
             console.log("error at @addGreenhouse : " + error)
             res.status(500).json({error: "Une erreur est survenue durant l'ajout de la serre"})
