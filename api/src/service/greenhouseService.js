@@ -1,8 +1,8 @@
 var jsonwebtoken = require('jsonwebtoken');
-const raspInfoRepository = require('../repository/raspInfoRepository')
+const raspInfoRepository = require('../repository/greenhouseRepository')
 const utilService = require('./utilService')
 
-class RaspInfoService{
+class Greenhouseservice{
     repo;
     util;
     constructor(){
@@ -23,4 +23,4 @@ class RaspInfoService{
     }
 }
 
-module.exports = RaspInfoService
+module.exports = Greenhouseservice

@@ -1,6 +1,6 @@
 const dbConnection = require('./db')
 
-class RaspInfoRepository{
+class GreenhouseRepository{
     db;
     constructor(){
         this.db = dbConnection
@@ -28,4 +28,4 @@ class RaspInfoRepository{
 
 }
 
-module.exports = RaspInfoRepository
+module.exports = GreenhouseRepository

@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const raspInfoController = require('../controller/raspInfoController')
-const RaspInfoController = new raspInfoController()
+const greenhouseController = require('../controller/greenhouseController')
+const GreenhouseController = new greenhouseController()
 
-router.post('/api/saveGreenhouseData', RaspInfoController.saveGreenhouseData)
+router.post('/api/saveGreenhouseData', GreenhouseController.saveGreenhouseData)
+
+router.post('/api/addGreenhouse', GreenhouseController.addGreenhouse)
 
 module.exports = router
