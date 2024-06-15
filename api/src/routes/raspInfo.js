@@ -4,7 +4,7 @@ const greenhouseController = require('../controller/greenhouseController')
 const GreenhouseController = new greenhouseController()
 const isLogged = require('../middlewares/isLogged')
 
-router.post('/api/saveGreenhouseData', GreenhouseController.saveGreenhouseData)
+router.post('/api/saveGreenhouseData', [isLogged], GreenhouseController.saveGreenhouseData)
 
 router.post('/api/addGreenhouse', [isLogged], GreenhouseController.addGreenhouse)
 

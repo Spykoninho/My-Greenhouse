@@ -26,6 +26,13 @@ class GreenhouseRepository{
         return resDb
     }
 
+    async addGreenhouseRepo(greenhouse_name, userId){
+        const sqlQuery = "INSERT INTO greenhouse (user_id_fk, name) VALUES (?, ?)"
+        const params = [userId, greenhouse_name]
+        let resDb = await this.executeQuery(sqlQuery, params)
+        return resDb
+    }
+
 }
 
 module.exports = GreenhouseRepository
