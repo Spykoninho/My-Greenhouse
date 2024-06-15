@@ -22,11 +22,10 @@ const isLogged = (req, res, next) => {
       if(tokenInfo.id==0 || !tokenInfo.id) return res.status(403).json({ error: "Accès non autorisé" });
       req.user = tokenInfo
       req.user.jwt = jwt
-      next()
+      return next()
     } catch (error) {
       return res.status(403).json({ error: "JWT non conforme ou expiré" });
     }
-    return res.status(403).json({ error: "JWT non renseigné" });
   } catch (error) {
     console.log(error);
     return res.status(503).json({ error: "Erreur" });

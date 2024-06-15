@@ -6,6 +6,6 @@ const isLogged = require('../middlewares/isLogged')
 
 router.post('/api/saveGreenhouseData', GreenhouseController.saveGreenhouseData)
 
-router.post('/api/addGreenhouse', [isLogged] ,GreenhouseController.addGreenhouse)
+router.post('/api/addGreenhouse', [isLogged], GreenhouseController.addGreenhouse)
 
 module.exports = router
