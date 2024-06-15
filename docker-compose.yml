@@ -12,7 +12,7 @@ services:
       - ./db/init_db.sql:/docker-entrypoint-initdb.d/init.sql
       - ./db/data:/var/lib/mysql
     ports:
-      - ${DB_PORT}
+      - ${DB_PORT_DOCKER}
     container_name: my_greenhouse_db
     networks:
       - my_greenhouse_network
@@ -32,7 +32,7 @@ services:
       - ./api/index.js:/app/index.js
       - ./api/package.json:/app/package.json
     ports:
-      - ${API_PORT}
+      - ${API_PORT_DOCKER}
     container_name: my_greenhouse_api
     build:
       context: api
