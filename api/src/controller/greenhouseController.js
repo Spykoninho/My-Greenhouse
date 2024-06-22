@@ -19,13 +19,9 @@ class GreenhouseController{
 
     addGreenhouse = async (req, res) => {
         try {
-            /*
-            let resService = await this.service.saveGreenhouseDataService(req.body, req.user)
+            let resService = await this.service.addGreenhouseService(req.body, req.user)
             if(resService.error) res.status(400).json({error: resService.error})
-            else res.status(200).json({message: "Serre ajoutée !"})
-            */
-           console.log("ok")
-           res.status(200).json({message: "Serre ajoutée avec succès !"})
+            else res.status(200).json({message: "Serre ajoutée avec succès !", id: resService})
         } catch (error) {
             console.log("error at @addGreenhouse : " + error)
             res.status(500).json({error: "Une erreur est survenue durant l'ajout de la serre"})
