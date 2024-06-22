@@ -27,21 +27,27 @@ class Greenhouseservice{
             let resUser = await this.user.getMyInfosService(userInfos.id)
             if(humidity >= resUser.max_air_humidity){
                 console.log("Alerte humidité de l'air trop élevée")
+                // envoyer la notif
             }
             if(humidity <= resUser.min_air_humidity){
                 console.log("Alerte humidité de l'air trop basse")
+                // envoyer la notif
             }
             if(soil_humidity >= resUser.max_soil_humidity){
                 console.log("Alerte humidité du sol trop élevée")
+                // envoyer la notif
             }
             if(soil_humidity <= resUser.min_soil_humidity){
                 console.log("Alerte humidité du sol trop basse")
+                // envoyer la notif
             }
             if(temperature >= resUser.max_temperature){
                 console.log("Alerte température trop élevée")
+                // envoyer la notif
             }
             if(temperature <= resUser.min_temperature){
                 console.log("Alerte température trop basse")
+                // envoyer la notif
             }
             return true
         } catch (error) {
