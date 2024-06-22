@@ -1,6 +1,7 @@
 var jsonwebtoken = require('jsonwebtoken');
 const raspInfoRepository = require('../repository/greenhouseRepository')
 const utilService = require('./utilService')
+const userService = require('./usersServices')
 
 class Greenhouseservice{
     repo;
@@ -8,13 +9,40 @@ class Greenhouseservice{
     constructor(){
         this.repo = new raspInfoRepository();
         this.util = new utilService();
+        this.user = new userService();
     }
     
     async saveGreenhouseDataService(body, userInfos){
         try {
-            console.log(body)
-            console.log(userInfos)
-            let resDb = await this.repo.saveGreenhouseDataRepo();
+            let idGreenhouse = body.idGreenhouse
+            let humidity = body.humidity
+            let soil_humidity = body.soil_humidity
+            let temperature = body.temperature
+            if(!idGreenhouse, !humidity, !soil_humidity, !temperature) return  {error: "Body incomplet"}
+            humidity=parseInt(humidity)
+            soil_humidity=parseInt(soil_humidity)
+            temperature=parseInt(temperature)
+            let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature);
+            if(resDb.affectedRows < 1) return {error: "Une erreur est survenue durant la sauvegarde des informations de la serre"}
+            let resUser = await this.user.getMyInfosService(userInfos.id)
+            if(humidity >= resUser.max_air_humidity){
+                console.log("Alerte humidité de l'air trop élevée")
+            }
+            if(humidity <= resUser.min_air_humidity){
+                console.log("Alerte humidité de l'air trop basse")
+            }
+            if(soil_humidity >= resUser.max_soil_humidity){
+                console.log("Alerte humidité du sol trop élevée")
+            }
+            if(soil_humidity <= resUser.min_soil_humidity){
+                console.log("Alerte humidité du sol trop basse")
+            }
+            if(temperature >= resUser.max_temperature){
+                console.log("Alerte température trop élevée")
+            }
+            if(temperature <= resUser.min_temperature){
+                console.log("Alerte température trop basse")
+            }
             return true
         } catch (error) {
             console.log("error at @saveGreenhouseDataService : " + error)
@@ -26,9 +54,16 @@ class Greenhouseservice{
         try {
             let greenhouse_name = body.greenhouse_name;
             if(greenhouse_name && greenhouse_name.length > 0){
+                if(greenhouse_name.length > 255) return {error: "Nom trop long"}
                 let resDb = await this.repo.addGreenhouseRepo(greenhouse_name, userInfos.id);
-                if(resDb.affectedRows > 0) return true
-                else return {error: "Une erreur est survenue durant l'ajout de la serre"}
+                if(resDb[0].id){
+                    console.log(resDb)
+                    return resDb[0].id
+                } 
+                else{
+                    console.log("error at @addGreenhouseService : " + resDb)
+                    return {error: "Une erreur est survenue durant l'ajout de la serre"}
+                } 
             }else return {error: "Body incomplet"}
         } catch (error) {
             console.log("error at @addGreenhouseService : " + error)

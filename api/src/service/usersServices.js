@@ -9,6 +9,17 @@ class UsersService{
         this.util = new utilService();
     }
     
+    async getMyInfosService(userId){
+        try {
+            let resDb = await this.repo.getMyInfosRepo(userId);
+            if(resDb[0].id) return resDb[0]
+            else return {error: "Cet utilisateur n'existe pas"}
+        } catch (error) {
+            console.log("Error at @getMyInfosService : " + error)
+            return {error: "Une erreur est survenue durant la récupération des informations."}
+        }
+    }
+
     async signInService(body){
         try {
             if(!body.email || !body.password || !body.username || !body.newsletter || !body.postal_code) return {error: "Body incomplet"}
@@ -18,7 +29,7 @@ class UsersService{
             let hashedPwd = this.util.hashPwd(body.password, salt)
             let inseeCode = await this.util.getInseeByPostal(body.postal_code)
             let resDb = await this.repo.signInRepo(body.email, hashedPwd, body.username, body.newsletter, salt, inseeCode)
-            if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT, {expiresIn: '30d'})}
+            if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT)}
             else return {error: "Erreur, identifiant déjà utilisé"}
         } catch (error) {
             console.log(error)
@@ -34,7 +45,7 @@ class UsersService{
             else return {error: "Login incorrect"}
             let hashedPwd = this.util.hashPwd(body.password, salt)
             let resDb = await this.repo.logInRepo(body.username, hashedPwd)
-            if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT, {expiresIn: '30d'})}
+            if(resDb && resDb[0] && resDb[0].id) return {id: resDb[0].id, jwt: jsonwebtoken.sign({id: resDb[0].id, email: resDb[0].email, username: resDb[0].username}, process.env.SECRET_JWT)}
             else return {error: "Login incorrect"}
         } catch (error) {
             console.log(error)

@@ -7,6 +7,17 @@ class UsersController{
         this.service = new UsersService()
     }
 
+    getMyInfos = async (req, res) => {
+        try {
+            let resService = await this.service.getMyInfosService(req.user.id)
+            if(resService.error) res.status(400).json({error: "Une erreur est survenue durant la récupération des informations."})
+            else res.status(200).json({userInfos: resService})
+        } catch (error) {
+            console.log("error at @getMyInfos : " + error)
+            res.status(500).json({error: "Une erreur est survenue durant la récupération des informations."})
+        }
+    }
+
     signIn = async (req, res) => {
         try {
             let resService = await this.service.signInService(req.body)
@@ -20,7 +31,7 @@ class UsersController{
                     httpOnly: false,
                     credentials: 'include'
                 })
-                res.status(200).json({message: "Inscription réussie !"})
+                res.status(200).json({message: "Inscription réussie !", jwt: resService.jwt})
             } 
         } catch (error) {
             console.log("error at @signIn : " + error)
@@ -41,7 +52,7 @@ class UsersController{
                     httpOnly: false,
                     credentials: 'include'
                 })
-                res.status(200).json({message: "Connexion réussie !"})
+                res.status(200).json({message: "Connexion réussie !", jwt: resService.jwt})
             } 
         } catch (error) {
             console.log("error at @logIn : " + error)

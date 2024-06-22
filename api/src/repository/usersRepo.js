@@ -6,6 +6,7 @@ class UsersRepo{
         this.db = dbConnection
     }
 
+    
     async executeQuery(query, params) {
         let connection;
         try {
@@ -18,6 +19,12 @@ class UsersRepo{
         }finally{
             if(connection) connection.release();
         }
+    }
+    
+    async getMyInfosRepo(userId){
+        const sqlQuery = "SELECT id, email, username, newsletter, darkmode, language, min_soil_humidity, max_soil_humidity, min_air_humidity, max_air_humidity, min_temperature, max_temperature, notifications, rank, insee_code FROM user WHERE id = ?";
+        let resDb = await this.executeQuery(sqlQuery, [userId])
+        return resDb
     }
 
     async signInRepo(email, password, username, newsletter, salt, insee_code){
