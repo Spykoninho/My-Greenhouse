@@ -32,6 +32,6 @@ router.get('/', (req, res)=>{
     res.status(200).json({message:'Welcome to the My Greenhouse\'s API !'})
 })
 
-router.all('/*', (req, res)=>{
-    res.status(400).json({error:'Error wrong route'})
-})
+app.use((req, res, next) => {
+    res.status(404).json({error: "ressource not found", cause: "bad method or inexistant route"});
+});
