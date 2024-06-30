@@ -6,7 +6,7 @@ var connection = mariadb.createPool({
     password: process.env.DB_USER_PWD,
     database: process.env.DB_DATABASE,
     port: process.env.DB_PORT,
-    connectionLimit: 5,
+    connectionLimit: 10,
 });
 
 module.exports = connection
