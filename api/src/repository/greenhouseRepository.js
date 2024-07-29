@@ -19,9 +19,9 @@ class GreenhouseRepository{
         }
     }
 
-    async saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature){
-        const sqlQuery = "INSERT INTO log_greenhouse (greenhouse_id_fk, humidity, soil_humidity, temperature) VALUES (?, ?, ?, ?)"
-        const params = [idGreenhouse, humidity, soil_humidity, temperature]
+    async saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime){
+        const sqlQuery = "INSERT INTO log_greenhouse (greenhouse_id_fk, humidity, soil_humidity, temperature, feel_temperature, date) VALUES (?, ?, ?, ?, ?, ?)"
+        const params = [idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime]
         let resDb = await this.executeQuery(sqlQuery, params)
         return resDb
     }
