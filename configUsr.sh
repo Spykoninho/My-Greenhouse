@@ -1,4 +1,7 @@
 #!/bin/bash
+echo "Installation des dépendances..."
+sudo apt-get install jq -y > /dev/null
+
 echo "Login :"
 echo "----"
 read -p "Username or email : " USERNAME
