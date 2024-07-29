@@ -18,11 +18,13 @@ class Greenhouseservice{
             let humidity = body.humidity
             let soil_humidity = body.soil_humidity
             let temperature = body.temperature
-            if(!idGreenhouse, !humidity, !soil_humidity, !temperature) return  {error: "Body incomplet"}
+            let feel_temperature = body.feel_temperature
+            if(!idGreenhouse || !humidity || !soil_humidity || !temperature || !feel_temperature) return  {error: "Body incomplet"}
             humidity=parseInt(humidity)
             soil_humidity=parseInt(soil_humidity)
             temperature=parseInt(temperature)
-            let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature);
+            feel_temperature=parseInt(feel_temperature)
+            let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature);
             if(resDb.affectedRows < 1) return {error: "Une erreur est survenue durant la sauvegarde des informations de la serre"}
             let resUser = await this.user.getMyInfosService(userInfos.id)
             if(humidity >= resUser.max_air_humidity){
