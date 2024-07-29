@@ -15,7 +15,7 @@ void loop() {
   int tauxHumidite = dht.readHumidity();
   int temperatureEnCelsius = dht.readTemperature();
   if(isnan(tauxHumidite) || isnan(temperatureEnCelsius)){
-    Serial.println("Aucune valeur retournÃ©e par le DHT22. Est-il bien branchÃ© ?");
+    Serial.println("Aucune valeur retournée par le DHT22. Est-il bien branché ?");
     delay(2000);
     return;
   }
