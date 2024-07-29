@@ -24,7 +24,10 @@ class Greenhouseservice{
             soil_humidity=parseInt(soil_humidity)
             temperature=parseInt(temperature)
             feel_temperature=parseInt(feel_temperature)
-            let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature);
+            var currentdate = new Date(); 
+            var datetime = currentdate.getFullYear()+"-"+currentdate.getMonth()+"-"+currentdate.getDate()+" "+currentdate.getHours()+":"+currentdate.getMinutes()+":"+currentdate.getSeconds()
+            console.log(datetime)
+            let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime);
             if(resDb.affectedRows < 1) return {error: "Une erreur est survenue durant la sauvegarde des informations de la serre"}
             let resUser = await this.user.getMyInfosService(userInfos.id)
             if(humidity >= resUser.max_air_humidity){
