@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/pages/login/login.dart';
 
 void main() {
@@ -13,9 +14,37 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return const MaterialApp(
+    return MaterialApp(
       title: 'My Greenhouse',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color(0xFFF1EFE4),
+              secondary: Color(0xFF14303B),
+              primary: Color(0xFFF1EFE4)),
+          textTheme: TextTheme(
+            titleLarge: GoogleFonts.montserrat(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF14303B)),
+            titleMedium: GoogleFonts.montserrat(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFFFFFFF)),
+            titleSmall: GoogleFonts.montserrat(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF000000)),
+            bodyMedium: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF000000)),
+            bodySmall: GoogleFonts.poppins(
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF000000)),
+          )),
       home: Login(),
     );
   }

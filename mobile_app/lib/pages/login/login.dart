@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/widgets/large_header.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -7,7 +8,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFF1EFE4),
+        backgroundColor: Theme.of(context).colorScheme.primary,
         body: Stack(
           children: <Widget>[
             LargeHeader(),
@@ -23,7 +24,10 @@ class Login extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [Text("Connexion")],
+                        children: [
+                          Text("Connexion",
+                              style: Theme.of(context).textTheme.titleLarge),
+                        ],
                       ),
                       decoration: BoxDecoration(
                           color: Colors.white,
@@ -41,11 +45,6 @@ class Login extends StatelessWidget {
               ),
               top: 0,
               left: 0,
-            ),
-            Container(
-              color: Colors.red,
-              width: 10,
-              height: 10,
             )
           ],
         ));

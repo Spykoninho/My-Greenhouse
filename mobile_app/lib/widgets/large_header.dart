@@ -13,7 +13,7 @@ class LargeHeader extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.height / 3,
             width: MediaQuery.of(context).size.width,
-            color: const Color(0xFF14303B),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           Positioned(
             top: MediaQuery.sizeOf(context).height / 4,
@@ -22,7 +22,7 @@ class LargeHeader extends StatelessWidget {
               height: 200,
               width: MediaQuery.sizeOf(context).width + 80,
               decoration: BoxDecoration(
-                  color: Color(0xFF14303B),
+                  color: Theme.of(context).colorScheme.secondary,
                   borderRadius:
                       const BorderRadius.all(Radius.elliptical(500, 200))),
             ),
