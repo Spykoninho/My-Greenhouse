@@ -6,18 +6,14 @@ class LargeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.sizeOf(context).width,
-      height: MediaQuery.sizeOf(context).height / 1.75,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       child: Stack(
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 3,
-              width: MediaQuery.of(context).size.width,
-              color: const Color(0xFF14303B),
-            ),
+          Container(
+            height: MediaQuery.of(context).size.height / 3,
+            width: MediaQuery.of(context).size.width,
+            color: const Color(0xFF14303B),
           ),
           Positioned(
             top: MediaQuery.sizeOf(context).height / 4,
