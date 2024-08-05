@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFFF1EFE4),
-              secondary: Color(0xFF14303B),
-              primary: Color(0xFFF1EFE4)),
+              seedColor: Color(0xFF14303B),
+              secondary: Color(0xFFF1EFE4),
+              primary: Color(0xFF14303B)),
           textTheme: TextTheme(
             titleLarge: GoogleFonts.montserrat(
                 fontSize: 24,

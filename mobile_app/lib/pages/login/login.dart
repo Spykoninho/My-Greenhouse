@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/widgets/large_header.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/widgets/text_field.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -8,7 +8,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         body: Stack(
           children: <Widget>[
             LargeHeader(),
@@ -23,10 +23,19 @@ class Login extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text("Connexion",
                               style: Theme.of(context).textTheme.titleLarge),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Email ou nom d'utilisateur :",
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
+                              InputField(hint: "email@gmail.com")
+                            ],
+                          )
                         ],
                       ),
                       decoration: BoxDecoration(
@@ -34,10 +43,10 @@ class Login extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                                color: Color(0x55000000),
+                                color: Color(0x25000000),
                                 spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: Offset(0, 3))
+                                blurRadius: 4,
+                                offset: Offset(0, 4))
                           ]),
                     ),
                   ],
@@ -45,7 +54,7 @@ class Login extends StatelessWidget {
               ),
               top: 0,
               left: 0,
-            )
+            ),
           ],
         ));
   }
