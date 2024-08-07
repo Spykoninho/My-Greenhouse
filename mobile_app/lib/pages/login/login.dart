@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/widgets/checkbox_mg.dart';
 import 'package:mobile_app/widgets/large_header.dart';
+import 'package:mobile_app/widgets/password_input.dart';
 import 'package:mobile_app/widgets/text_field.dart';
 
 class Login extends StatelessWidget {
@@ -35,7 +37,17 @@ class Login extends StatelessWidget {
                                       Theme.of(context).textTheme.bodyMedium),
                               InputField(hint: "email@gmail.com")
                             ],
-                          )
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Mot de passe :",
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
+                              PasswordInput(hint: "********")
+                            ],
+                          ),
+                          CheckboxMg()
                         ],
                       ),
                       decoration: BoxDecoration(
