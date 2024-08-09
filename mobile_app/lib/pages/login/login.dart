@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app/widgets/checkbox_mg.dart';
 import 'package:mobile_app/widgets/large_header.dart';
-import 'package:mobile_app/widgets/password_input.dart';
-import 'package:mobile_app/widgets/text_field.dart';
+import 'package:mobile_app/widgets/login_form.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -25,29 +23,17 @@ class Login extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.9,
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          SizedBox(
+                            height: 1,
+                          ),
                           Text("Connexion",
                               style: Theme.of(context).textTheme.titleLarge),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Email ou nom d'utilisateur :",
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              InputField(hint: "email@gmail.com")
-                            ],
+                          LoginForm(),
+                          SizedBox(
+                            height: 70,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Mot de passe :",
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium),
-                              PasswordInput(hint: "********")
-                            ],
-                          ),
-                          CheckboxMg()
                         ],
                       ),
                       decoration: BoxDecoration(
@@ -67,6 +53,20 @@ class Login extends StatelessWidget {
               top: 0,
               left: 0,
             ),
+            Positioned(
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/greenLogoBgRemoveNoText.png',
+                    width: 100,
+                  )
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              top: 70,
+              left: 0,
+              width: MediaQuery.of(context).size.width,
+            )
           ],
         ));
   }
