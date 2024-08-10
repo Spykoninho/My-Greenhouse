@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -18,6 +20,18 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
     usernameController.dispose();
     pwdController.dispose();
+  }
+
+  Future<void> _login(username, pwd) async {
+    try {
+      var api_ip = dotenv.env['API_IP'] ?? "";
+      var url = Uri.http(api_ip, '/api/login');
+      var response =
+          await http.post(url, body: {'username': username, 'password': pwd});
+      print('REPONSE : ${response.body}');
+    } catch (e) {
+      print('Error : ${e}');
+    }
   }
 
   @override
@@ -124,8 +138,7 @@ class _LoginFormState extends State<LoginForm> {
                           if (_formkey.currentState!.validate()) {
                             final username = usernameController.text;
                             final pwd = pwdController.text;
-                            print('$username et $pwd et $isChecked');
-                            // FAIRE LA REQUETE HTTP --> VOIR POUR TOUT METTRE EN HTTPS
+                            _login(username, pwd);
                           }
                         },
                         child: const Text("Se connecter"))),

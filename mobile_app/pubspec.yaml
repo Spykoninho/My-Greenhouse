@@ -33,6 +33,7 @@ dependencies:
   fl_chart: ^0.68.0
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.6
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
