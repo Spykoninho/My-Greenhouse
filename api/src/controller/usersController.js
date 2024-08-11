@@ -26,7 +26,7 @@ class UsersController{
                 res.cookie('MyGreenhouseCookie', resService.jwt, { 
                     domain: process.env.URL_SITE,
                     path: '/',
-                    secure: false,
+                    secure: true,
                     expires: new Date(Date.now()+(1000 * 3600)*24*30), // 1 mois
                     httpOnly: false,
                     credentials: 'include'
@@ -47,7 +47,7 @@ class UsersController{
                 res.cookie('MyGreenhouseCookie', resService.jwt, { 
                     domain: process.env.URL_SITE,
                     path: '/',
-                    secure: false,
+                    secure: true,
                     expires: new Date(Date.now()+(1000 * 3600)*24*30), // 1 mois
                     httpOnly: false,
                     credentials: 'include'

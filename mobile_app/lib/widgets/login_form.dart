@@ -24,8 +24,8 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> _login(username, pwd) async {
     try {
-      var api_ip = dotenv.env['API_IP'] ?? "";
-      var url = Uri.http(api_ip, '/api/login');
+      var api_url = dotenv.env['API_HTTPS_URL'] ?? "";
+      var url = Uri.http(api_url, '/api/login');
       var response =
           await http.post(url, body: {'username': username, 'password': pwd});
       print('REPONSE : ${response.body}');
