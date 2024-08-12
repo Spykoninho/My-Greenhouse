@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_app/pages/connectRaspberry/connectRaspberry.dart';
 import 'package:mobile_app/pages/login/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.normal,
                 color: Color(0xFF000000)),
           )),
-      home: Login(),
+      routes: {
+        '/': (BuildContext context) => Login(),
+        'ConnectRaspberry': (BuildContext context) => ConnectRaspberry(),
+      },
     );
   }
 }
