@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile_app/widgets/large_header.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class ConnectRaspberry extends StatefulWidget {
   const ConnectRaspberry({super.key});
@@ -17,6 +21,80 @@ class _ConnectRaspberryState extends State<ConnectRaspberry> {
     sharedPreferences.setBool('isConnected', false);
     sharedPreferences.remove('jwt');
     Navigator.of(context).pushNamed('/');
+  }
+
+  Future<void> checkGreenhouse() async {
+    try {
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      var jwt = sharedPreferences.getString('jwt') ?? "";
+      var api_url = dotenv.env['API_HTTPS_URL'] ?? "";
+      var url = Uri.https(api_url, '/api/getMyGreenhouses');
+      var response = await http.post(url, headers: {"Authorization": jwt});
+      var parsed = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        var greenhouses = parsed["greenhouses"];
+        if (greenhouses.length > 0) {
+          Navigator.of(context).pushNamed('home');
+        } else {
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Erreur"),
+                  content: Text(
+                      "Aucune serre n'est pour l'instant liée à votre compte."),
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.close),
+                    )
+                  ],
+                );
+              });
+        }
+      } else {
+        var error = parsed['error'];
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Erreur"),
+                content: Text(error),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: Icon(Icons.close),
+                  )
+                ],
+              );
+            });
+      }
+    } catch (e) {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Erreur"),
+              content: Text(e.toString()),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.close),
+                )
+              ],
+            );
+          });
+    }
   }
 
   @override
@@ -63,7 +141,7 @@ class _ConnectRaspberryState extends State<ConnectRaspberry> {
                           SizedBox(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => checkGreenhouse(),
                                 child: Text("Valider"),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
