@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    branches: [ main ]
+    branches: [ dev ]
 
 jobs:
   build:
@@ -16,6 +16,6 @@ jobs:
         port: 22
         script: |
           cd ./My-Greenhouse
-          git pull origin main
+          git pull origin dev
           ./install-build-projects.sh
           docker-compose up -d --build

@@ -25,7 +25,7 @@ class Greenhouseservice{
             temperature=parseInt(temperature)
             feel_temperature=parseInt(feel_temperature)
             var currentdate = new Date(); 
-            var datetime = currentdate.getFullYear()+"-"+currentdate.getMonth()+"-"+currentdate.getDate()+" "+(currentdate.getHours()+2)+":"+currentdate.getMinutes()+":"+currentdate.getSeconds()
+            var datetime = currentdate.getFullYear()+"-"+(currentdate.getMonth()+1)+"-"+currentdate.getDate()+" "+(currentdate.getHours()+2)+":"+currentdate.getMinutes()+":"+currentdate.getSeconds()
             console.log(datetime)
             let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime);
             if(resDb.affectedRows < 1) return {error: "Une erreur est survenue durant la sauvegarde des informations de la serre"}
@@ -79,6 +79,17 @@ class Greenhouseservice{
         } catch (error) {
             console.log("error at @addGreenhouseService : " + error)
             return {error: "Une erreur est survenue durant l'ajout de la serre"}
+        }
+    }
+    async getMyGreenhousesService(userInfos){
+        try {
+            let userId = userInfos.id;
+            let resDb = await this.repo.getMyGreenhousesRepo(userId);
+            console.log(resDb)
+            return resDb
+        } catch (error) {
+            console.log("error at @getMyGreenhousesService : " + error)
+            return {error: "Une erreur est survenue durant la récupération des serres de la serre"}
         }
     }
 }

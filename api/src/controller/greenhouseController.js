@@ -27,6 +27,17 @@ class GreenhouseController{
             res.status(500).json({error: "Une erreur est survenue durant l'ajout de la serre"})
         }
     }
+
+    getMyGreenhouses = async (req, res) => {
+        try {
+            let resService = await this.service.getMyGreenhousesService(req.user)
+            if(resService.error) res.status(400).json({error: resService.error})
+            else res.status(200).json({greenhouses: resService})
+        } catch (error) {
+            console.log("error at @getMyGreenhouses : " + error)
+            res.status(500).json({error: "Une erreur est survenue durant la récupération des serres"})
+        }
+    }
 }
 
 module.exports = GreenhouseController
