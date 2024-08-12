@@ -33,6 +33,13 @@ class GreenhouseRepository{
         return resDb
     }
 
+    async getMyGreenhousesRepo(userId){
+        const sqlQuery = "SELECT g.name AS greenhouse_name, lg.humidity, lg.soil_humidity, lg.temperature, lg.feel_temperature, DATE_FORMAT(lg.date,'%d/%m/%Y %H:%i:%s')AS last_update, lg.id FROM greenhouse AS g LEFT JOIN log_greenhouse AS lg ON lg.id = (SELECT id FROM log_greenhouse WHERE greenhouse_id_fk = g.id ORDER BY date DESC LIMIT 1) WHERE g.user_id_fk = ?"
+        const params = [userId]
+        let resDb = await this.executeQuery(sqlQuery, params)
+        return resDb
+    }
+
 }
 
 module.exports = GreenhouseRepository
