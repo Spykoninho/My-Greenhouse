@@ -80,17 +80,8 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  Future<void> isLogin() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    if (sharedPreferences.getBool("isConnected") == true) {
-      Navigator.of(context).pushNamed('ConnectRaspberry');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    isLogin();
     return Form(
         key: _formkey,
         child: Column(
