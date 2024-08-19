@@ -31,14 +31,24 @@ First, power on your Raspberry with the SD card inside, connect it in HDMI and i
 
 You can put a static ip to connect easily on SSH.
 #### Raspberry Pi Config
-1. go to your Desktop folder : cd Desktop/
-2. clone the github repo : git clone https://github.com/Spykoninho/My-Greenhouse.git
+1. go to your Desktop folder : 
+```bash
+ cd Desktop/ 
+ ```
+2. clone the github repo :
+```bash
+git clone https://github.com/Spykoninho/My-Greenhouse.git
+```
 3. put the env variables : follow the env-example file
-   1. sudo nano /etc/environment
-   2. source /etc/environment
-4. exec the file configUsr.sh : 
-   1. chmod +x ~/Desktop/My-Greenhouse/configUsr.sh
-   2. sudo ./configUsr.sh (it's possible that it's not recognize the env variable API_IP_HOST at the beginning)
+```bash
+sudo nano /etc/environment
+source /etc/environment
+```
+4. exec the file configUsr.sh : (it's possible that it's not recognize the env variable API_IP_HOST at the beginning)
+```bash
+chmod +x ~/Desktop/My-Greenhouse/configUsr.sh
+sudo ./configUsr.sh
+```
    3. Follow the instructions
 
 #### Arduino config
@@ -53,20 +63,51 @@ You can put a static ip to connect easily on SSH.
 
 #### Connect the Raspberry and the Arduino
 1. Go on your Raspberry, install python3 : 
-   1. sudo apt-get install python3
-   2. sudo apt-get install python3-pip
-   3. pip install virtualenv
+```bash
+sudo apt-get install python3
+sudo apt-get install python3-pip
+pip install virtualenv
+```
 2. Create a virtual env
-   1. Go on Desktop/ folder : cd ~/Desktop
-   2. virtualenv virtualenv_name or /home/USER/.local/bin/virtualenv
-   3. source venvPython/bin/activate
+```bash
+cd ~/Desktop
+virtualenv virtualenv_name
+source venvPython/bin/activate
+```
 3. Install dependancies :
-   1. python3 -m pip install requests
-   2. pip install pyserial
-4. Connect the sensor (see picture below)
+```bash
+python3 -m pip install requests
+pip install pyserial
+```
+4. Connect the sensors to the arduino:
+   1. DHT
+      1. VCC to 5V
+      2. GND to GND
+      3. DATA to D6
+   2. Humidity sensor
+      1. VCC to 3.3V
+      2. GND to GND
+      3. DATA to A0
+ 
+      Example : 
+![alt](./image_sensor_connection.jpg)
+5. exec the python file [raspArduino.py](./raspArduino.py)
+```bash
+python3 ./raspArduino.py
+```
+Done !
 
-5. Go on ~/Desktop/My-Greenhouse
-6. exec the python file [raspArduino.py](./raspArduino.py)
+#### Print the 3d box
+Go on website like [3denligne.fr](https://3denligne.fr/) and print the two models : 
+- The [box](./mg_boite.stl)
+- The [cover](./mg_couvercle.stl)
+
+Then, put the breadboard, raspberry and sensors inside like the pictures below : 
+[INSERT PICTURE]()
+### 2. Software Installation
+I made the choice to store the data and api on a VPS but you can put it in your raspberry with a sqlite for example.
+
+#### Database
 
 ## Languages and Technologies
 
