@@ -104,20 +104,34 @@ Go on website like [3denligne.fr](https://3denligne.fr/) and print the two model
 
 Then, put the breadboard, raspberry and sensors inside like the pictures below : 
 [INSERT PICTURE]()
-### 2. Software Installation
+### 2. API / DB
 I made the choice to store the data and api on a VPS but you can put it in your raspberry with a sqlite for example.
 
-#### Database
+#### Docker
+A docker-compose file is present at the root of the directory, containing 2 services: the api and the database. For the API, a Dockerfile is also present to provide the image for building the api.
+
+Before starting containers, run : 
+```bash
+chmod +x install-build-projects.sh
+./install-build-projects.sh
+```
+then, start the containers : 
+
+```bash
+docker compose up --build
+```
+The --build option is used to build the api service with its Dockerfile, you can remove it if you don't need it
+
+Check that containers have been successfully booted
+
+```bash
+docker ps
+```
+
+The website should normally be accessible at `http://localhost:3000` and the api at `http://localhost:3001`
+(Or the port you specified)
 
 ## Languages and Technologies
-
-### Web application
-#### - Front-End
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-
-#### - Back-End
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
 ### Mobile application
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
@@ -127,12 +141,6 @@ I made the choice to store the data and api on a VPS but you can put it in your 
 
 ### Containerization
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-
-## Run
-### Required 
-- Docker installation with docker compose
-### Commands for developping
-** Run for the first time ** ```docker compose up```
 
 ## License
 
