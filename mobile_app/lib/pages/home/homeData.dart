@@ -23,9 +23,11 @@ class _HomeDataState extends State<HomeData> {
   @override
   void initState() {
     super.initState();
-    fetchSharedVars();
     getAllGreenhouses();
+    fetchSharedVars();
     timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      fetchSharedVars();
+
       setState(() {
         getAllGreenhouses();
       });
@@ -39,13 +41,11 @@ class _HomeDataState extends State<HomeData> {
   }
 
   Future<void> fetchSharedVars() async {
-    // Récupérer les variables partagées
     greenhouseName = await getSharedVar("greenhouse_name");
     temperature = await getSharedVar("temperature");
     humidity = await getSharedVar("humidity");
     soilHumidity = await getSharedVar("soil_humidity");
 
-    // Appeler setState pour mettre à jour l'interface utilisateur
     setState(() {});
   }
 
