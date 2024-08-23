@@ -208,7 +208,7 @@ class _HomeDataState extends State<HomeData> {
       final SharedPreferences sp = await SharedPreferences.getInstance();
       var inseeCode = await getInseeCode();
       var weatherToken = 'Bearer ' + (dotenv.env['WEATHER_TOKEN'] ?? "");
-      var url = Uri.https("api.meteo-concept.com", "/api/forecast/daily/1",
+      var url = Uri.https("api.meteo-concept.com", "/api/forecast/daily/0",
           {'insee': inseeCode});
       var apiRes =
           await http.get(url, headers: {'Authorization': weatherToken});

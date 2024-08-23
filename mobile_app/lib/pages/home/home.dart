@@ -24,17 +24,6 @@ class _HomeState extends State<Home> {
     Weather(),
   ];
 
-  Future<void> deleteShared() async {
-    final SharedPreferences sp = await SharedPreferences.getInstance();
-    sp.remove('globalWeather');
-    sp.remove('weatherTemperatureMax');
-    sp.remove('weatherTemperatureMin ');
-    sp.remove('weatherSun');
-    sp.remove('weatherRain');
-    sp.remove('weatherFrost');
-    sp.remove('weatherWind');
-  }
-
   void leaveApp() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     return (await showDialog(
@@ -46,9 +35,7 @@ class _HomeState extends State<Home> {
           TextButton(
               onPressed: () => Navigator.of(context).pop(false),
               child: new Text("Non")),
-          TextButton(
-              onPressed: () => {deleteShared(), exit(0)},
-              child: new Text("Oui"))
+          TextButton(onPressed: () => {exit(0)}, child: new Text("Oui"))
         ],
       ),
     ));
