@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +21,13 @@ class _HomeDataState extends State<HomeData> {
   String temperature = "";
   String humidity = "";
   String soilHumidity = "";
+  int globalWeather = 0;
+  String weatherTemperatureMin = "";
+  String weatherTemperatureMax = "";
+  String weatherSun = "";
+  String weatherRain = "";
+  String weatherFrost = "";
+  String weatherWind = "";
   Map<int, String> weatherConditions = {
     0: "Soleil",
     1: "Peu nuageux",
@@ -132,8 +140,25 @@ class _HomeDataState extends State<HomeData> {
       var spVar = sp.getString(name) ?? "";
       return spVar;
     } catch (e) {
-      print("Error : " + e.toString());
+      print("Error1 : " + e.toString());
       return "";
+    }
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  Future<int> getIntSharedVar(name) async {
+    try {
+      final SharedPreferences sp = await SharedPreferences.getInstance();
+      var spVar = sp.getInt(name) ?? 0;
+      return spVar;
+    } catch (e) {
+      print("Error2 : " + e.toString());
+      return 0;
     }
   }
 
@@ -144,9 +169,17 @@ class _HomeDataState extends State<HomeData> {
       humidity = await getSharedVar("humidity");
       soilHumidity = await getSharedVar("soil_humidity");
 
+      globalWeather = await getIntSharedVar("globalWeather");
+      weatherTemperatureMin = await getSharedVar("weatherTemperatureMin");
+      weatherTemperatureMax = await getSharedVar("weatherTemperatureMax");
+      weatherSun = await getSharedVar("weatherSun");
+      weatherRain = await getSharedVar("weatherRain");
+      weatherFrost = await getSharedVar("weatherFrost");
+      weatherWind = await getSharedVar("weatherWind");
+
       setState(() {});
     } catch (e) {
-      print("Error : " + e.toString());
+      print("Error3 : " + e.toString());
     }
   }
 
@@ -165,24 +198,37 @@ class _HomeDataState extends State<HomeData> {
         return "";
       }
     } catch (e) {
-      print("Error : " + e.toString());
+      print("4 : " + e.toString());
       return "";
     }
   }
 
   Future<void> getTodayWeather() async {
     try {
+      final SharedPreferences sp = await SharedPreferences.getInstance();
       var inseeCode = await getInseeCode();
       var weatherToken = 'Bearer ' + (dotenv.env['WEATHER_TOKEN'] ?? "");
-      var url = Uri.https("api.meteo-concept.com", "/api/forecast/daily/0",
+      var url = Uri.https("api.meteo-concept.com", "/api/forecast/daily/1",
           {'insee': inseeCode});
       var apiRes =
           await http.get(url, headers: {'Authorization': weatherToken});
       if (apiRes.statusCode == 200) {
         weather = jsonDecode(apiRes.body);
+        var global = weather['forecast']['weather'];
+        sp.setInt("globalWeather", global);
+        sp.setString(
+            "weatherTemperatureMin", weather['forecast']['tmin'].toString());
+        sp.setString(
+            "weatherTemperatureMax", weather['forecast']['tmax'].toString());
+        sp.setString("weatherSun", weather['forecast']['sun_hours'].toString());
+        sp.setString("weatherRain", weather['forecast']['rr1'].toString());
+        sp.setString(
+            "weatherFrost", weather['forecast']['probafrost'].toString());
+        sp.setString(
+            "weatherWind", weather['forecast']['probawind70'].toString());
       }
     } catch (e) {
-      print("Error : " + e.toString());
+      print("Error4 : " + e.toString());
     }
   }
 
@@ -204,14 +250,8 @@ class _HomeDataState extends State<HomeData> {
             "soil_humidity", greenhouses[0]['soil_humidity'].toString());
       }
     } catch (e) {
-      print("Error : $e");
+      print("Error5 : $e");
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    timer?.cancel();
   }
 
   @override
@@ -350,7 +390,7 @@ class _HomeDataState extends State<HomeData> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(8))),
-                  child: weather != null
+                  child: globalWeather != 0
                       ? Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,9 +401,11 @@ class _HomeDataState extends State<HomeData> {
                                   width: 10,
                                 ),
                                 Text("Temps global : "),
-                                Text(weatherConditions[weather['forecast']
-                                        ['weather']]
-                                    .toString())
+                                Flexible(
+                                    child: Text(
+                                  weatherConditions[globalWeather].toString(),
+                                  overflow: TextOverflow.visible,
+                                ))
                               ],
                             ),
                             Row(
@@ -380,7 +422,7 @@ class _HomeDataState extends State<HomeData> {
                                   width: 10,
                                 ),
                                 Text(
-                                    "${weather['forecast']['tmin']}-${weather['forecast']['tmax']}°C")
+                                    "${weatherTemperatureMin}-${weatherTemperatureMax}°C")
                               ],
                             ),
                             Row(
@@ -396,7 +438,7 @@ class _HomeDataState extends State<HomeData> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text("${weather['forecast']['sun_hours']}h")
+                                Text("${weatherSun}h")
                               ],
                             ),
                             Row(
@@ -412,7 +454,7 @@ class _HomeDataState extends State<HomeData> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text("${weather['forecast']['rr1']}mm")
+                                Text("${weatherRain}mm")
                               ],
                             ),
                             Row(
@@ -428,7 +470,7 @@ class _HomeDataState extends State<HomeData> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text("${weather['forecast']['probafrost']}%")
+                                Text("${weatherFrost}%")
                               ],
                             ),
                             Row(
@@ -444,7 +486,7 @@ class _HomeDataState extends State<HomeData> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text("${weather['forecast']['probawind70']}%")
+                                Text("${weatherWind}%")
                               ],
                             ),
                           ],
@@ -453,6 +495,9 @@ class _HomeDataState extends State<HomeData> {
                           child: CircularProgressIndicator(),
                         ),
                 ),
+                SizedBox(
+                  height: 8,
+                )
               ],
             ),
           )
