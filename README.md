@@ -91,19 +91,43 @@ pip install pyserial
  
       Example : 
 ![alt](./image_sensor_connection.jpg)
-5. exec the python file [raspArduino.py](./raspArduino.py)
-```bash
-python3 ./raspArduino.py
-```
-Done !
 
 #### Print the 3d box
 Go on website like [3denligne.fr](https://3denligne.fr/) and print the two models : 
 - The [box](./mg_boite.stl)
 - The [cover](./mg_couvercle.stl)
 
-Then, put the breadboard, raspberry and sensors inside like the pictures below : 
-[INSERT PICTURE]()
+Then, put the breadboard, raspberry and sensors inside the box.
+
+#### Start python file at the boot
+create a service :
+```bash
+sudo nano /lib/systemd/system/mygreenhouse.service
+```
+put inside : 
+```bash
+[Unit]
+Description=Send sensor data to db
+After=network.target
+
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+ExecStart=/bin/bash -c 'cd /home/YOUR_USERNAME/Desktop/venvPython/ && source venvPython/bin/activate && cd /home/YOUR_USERNAME/Desktop/My-Greenhouse/ && python3 raspArduino.py'
+Environment="JWT=YOUR_JWT"
+Environment="GREENHOUSE_ID=YOUR_GREENHOUSE_ID"
+Environment="API_IP_HOST=YOUR_API_IP_HOST"
+
+[Install]
+WantedBy=multi-user.target
+```
+then
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable mygreenhouse.service
+```
 ### 2. API / DB
 I made the choice to store the data and api on a VPS but you can put it in your raspberry with a sqlite for example.
 
