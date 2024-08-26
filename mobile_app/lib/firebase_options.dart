@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,16 +50,21 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDTxXhJe0DqHgaySrsngp8O5-tg_kOpJVU',
+  static final String android_api_key =
+      dotenv.env['FIREBASE_API_ANDROID_KEY'] ?? '';
+
+  static FirebaseOptions android = FirebaseOptions(
+    apiKey: android_api_key,
     appId: '1:191964483764:android:5c4629f212aedd308b07e1',
     messagingSenderId: '191964483764',
     projectId: 'my-greenhouse-155fb',
     storageBucket: 'my-greenhouse-155fb.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBGukYHlaD6ZqHFMPb9XPJJmnwvZ46Xzug',
+  static final String ios_api_key = dotenv.env['FIREBASE_API_IOS_KEY'] ?? '';
+
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: ios_api_key,
     appId: '1:191964483764:ios:555a5d2dc01a3d7b8b07e1',
     messagingSenderId: '191964483764',
     projectId: 'my-greenhouse-155fb',
