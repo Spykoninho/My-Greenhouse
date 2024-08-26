@@ -36,6 +36,8 @@ dependencies:
   flutter_dotenv: ^5.1.0
   shared_preferences: ^2.3.1
   curved_navigation_bar: ^1.0.6
+  onesignal_flutter: ^5.2.3
+  firebase_core: ^3.3.0
 
 dev_dependencies:
   flutter_test:

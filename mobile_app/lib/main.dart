@@ -5,9 +5,19 @@ import 'package:mobile_app/pages/connectRaspberry/connectRaspberry.dart';
 import 'package:mobile_app/pages/home/home.dart';
 import 'package:mobile_app/pages/login/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'firebase_options.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("5126ff04-dfdf-4525-95fd-c6cf3c630acd");
+  OneSignal.Notifications.requestPermission(true);
   runApp(const MyApp());
 }
 
