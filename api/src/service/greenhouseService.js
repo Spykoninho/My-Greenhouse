@@ -26,9 +26,26 @@ class Greenhouseservice{
             feel_temperature=parseInt(feel_temperature)
             var currentdate = new Date(); 
             var datetime = currentdate.getFullYear()+"-"+(currentdate.getMonth()+1)+"-"+currentdate.getDate()+" "+(currentdate.getHours()+2)+":"+currentdate.getMinutes()+":"+currentdate.getSeconds()
-            console.log(datetime)
             let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime);
             if(resDb.affectedRows < 1) return {error: "Une erreur est survenue durant la sauvegarde des informations de la serre"}
+            const url = 'https://api.onesignal.com/notifications?c=push'
+            let bodyJson = JSON.stringify({
+                template_id: 'd461ec13-6af1-4c19-88dd-5e3c2fcb06d1',
+                app_id: process.env.ONESIGNAL_APP_ID,
+                included_segments: ["All"]
+            })
+            const options = {
+                method: 'POST',
+                headers: {
+                    accept: 'application/json', 'content-type': 'application/json',
+                    Authorization: `Basic ${process.env.ONESIGNAL_API_KEY}`},
+                body: bodyJson
+              };
+            
+            let result = await fetch(url, options);
+            let parsed = await result.json();
+            console.log(parsed)
+
             let resUser = await this.user.getMyInfosService(userInfos.id)
             if(humidity >= resUser.max_air_humidity){
                 console.log("Alerte humidité de l'air trop élevée")
