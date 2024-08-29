@@ -1,4 +1,4 @@
-package com.mygreenhouse.mobile_app
+package com.mygreenhouse.app
 
 import io.flutter.embedding.android.FlutterActivity
 

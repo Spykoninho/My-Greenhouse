@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,9 +7,27 @@ import 'package:mobile_app/pages/connectRaspberry/connectRaspberry.dart';
 import 'package:mobile_app/pages/home/home.dart';
 import 'package:mobile_app/pages/login/login.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  OneSignal.initialize("5126ff04-dfdf-4525-95fd-c6cf3c630acd");
+  OneSignal.Notifications.requestPermission(true);
+  var userId = await OneSignal.User.getOnesignalId();
+  final SharedPreferences sp = await SharedPreferences.getInstance();
+  var apiUrl = dotenv.env['API_HTTPS_URL'] ?? "";
+  var jwt = sp.getString("jwt") ?? "";
+  var route = Uri.https(apiUrl, "/api/setOneSignalId");
+  var apiRes = await http.post(route,
+      body: {'onesignal_id': userId}, headers: {'Authorization': jwt});
   runApp(const MyApp());
 }
 

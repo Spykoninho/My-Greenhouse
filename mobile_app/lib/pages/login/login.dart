@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app/widgets/large_header.dart';
 import 'package:mobile_app/pages/login/login_form.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -29,12 +30,20 @@ class _LoginState extends State<Login> {
     ));
   }
 
+  Future<void> isLogin() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    if (sharedPreferences.getBool("isConnected") == true) {
+      Navigator.of(context).pushNamed('home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor: Theme.of(context).colorScheme.primary,
         systemNavigationBarIconBrightness: Brightness.light));
-
+    isLogin();
     return PopScope(
         onPopInvoked: (didPop) => leaveApp(),
         canPop: false,

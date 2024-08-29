@@ -3,8 +3,8 @@
 #define DHTPin 6
 #define DHTType 22
 #define humiditySensorPin A0
-#define sensorDryValue 570 // value for dry sensor
-#define sensorWetValue 258 // value for wet sensor
+#define sensorDryValue 439 // value for dry sensor TO MODIFY LATER
+#define sensorWetValue 248 // value for wet sensor
 int humiditySensorValue = 0;
 
 DHT dht(DHTPin, DHTType);
@@ -24,7 +24,7 @@ void loop() {
    
   if(isnan(tauxHumidite) || isnan(temperatureEnCelsius)){
     Serial.println("Aucune valeur retournée par le DHT22. Est-il bien branché ?");
-    delay(60000);
+    delay(600000);
     return;
   }
 
@@ -39,5 +39,5 @@ void loop() {
   result.concat(String(percentageHumididy));
 
   Serial.print(result);
-  delay(60000);
+  delay(600000);
 }
