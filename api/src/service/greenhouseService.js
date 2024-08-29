@@ -108,7 +108,6 @@ class Greenhouseservice {
                 if (greenhouse_name.length > 255) return { error: "Nom trop long" }
                 let resDb = await this.repo.addGreenhouseRepo(greenhouse_name, userInfos.id);
                 if (resDb[0].id) {
-                    console.log(resDb)
                     return resDb[0].id
                 }
                 else {
@@ -125,7 +124,6 @@ class Greenhouseservice {
         try {
             let userId = userInfos.id;
             let resDb = await this.repo.getMyGreenhousesRepo(userId);
-            console.log(resDb)
             return resDb
         } catch (error) {
             console.log("error at @getMyGreenhousesService : " + error)

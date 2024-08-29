@@ -50,7 +50,6 @@ class GreenhouseRepository {
             sqlQuery = "UPDATE user SET notif_air_humidity = ? WHERE id = ?";
         }
         const params = [status, userId]
-        console.log(sqlQuery, status)
         let resDb = await this.executeQuery(sqlQuery, params)
         return resDb
     }
