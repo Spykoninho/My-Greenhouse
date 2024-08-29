@@ -30,9 +30,10 @@ class Greenhouseservice {
             let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime);
             if (resDb.affectedRows < 1) return { error: "Une erreur est survenue durant la sauvegarde des informations de la serre" }
             const url = 'https://api.onesignal.com/notifications?c=push'
+            let resUser = await this.user.getMyInfosService(userInfos.id)
             let bodyJson = {
                 app_id: process.env.ONESIGNAL_APP_ID,
-                included_segments: ["All"]
+                included_player_ids: [resUser.onesignal_id]
             }
             let options = {
                 method: 'POST',
@@ -42,7 +43,6 @@ class Greenhouseservice {
                 },
             };
 
-            let resUser = await this.user.getMyInfosService(userInfos.id)
             if (resUser.notifications == 1) {
 
                 if (humidity >= resUser.max_air_humidity && resUser.notif_air_humidity == 0) {
