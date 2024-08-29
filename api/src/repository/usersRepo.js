@@ -22,7 +22,7 @@ class UsersRepo{
     }
     
     async getMyInfosRepo(userId){
-        const sqlQuery = "SELECT id, email, username, newsletter, darkmode, language, min_soil_humidity, max_soil_humidity, min_air_humidity, max_air_humidity, min_temperature, max_temperature, notifications, rank, insee_code FROM user WHERE id = ?";
+        const sqlQuery = "SELECT id, email, username, newsletter, darkmode, language, min_soil_humidity, max_soil_humidity, min_air_humidity, max_air_humidity, min_temperature, max_temperature, notifications, notif_temperature, notif_air_humidity, notif_soil_humidity, rank, insee_code FROM user WHERE id = ?";
         let resDb = await this.executeQuery(sqlQuery, [userId])
         return resDb
     }

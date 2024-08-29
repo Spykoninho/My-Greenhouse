@@ -24,7 +24,7 @@ void loop() {
    
   if(isnan(tauxHumidite) || isnan(temperatureEnCelsius)){
     Serial.println("Aucune valeur retournée par le DHT22. Est-il bien branché ?");
-    delay(60000);
+    delay(600000);
     return;
   }
 
@@ -39,5 +39,5 @@ void loop() {
   result.concat(String(percentageHumididy));
 
   Serial.print(result);
-  delay(60000);
+  delay(600000);
 }
