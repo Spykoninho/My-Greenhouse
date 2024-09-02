@@ -40,7 +40,7 @@ class Greenhouseservice {
             let resUser = await this.user.getMyInfosService(userInfos.id)
             let bodyJson = {
                 app_id: process.env.ONESIGNAL_APP_ID,
-                include_player_ids: [resUser.onesignal_id]
+                include_aliases: { external_id: [resUser.onesignal_id] }
             }
             let options = {
                 method: 'POST',

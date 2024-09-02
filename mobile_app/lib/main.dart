@@ -21,17 +21,15 @@ Future main() async {
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
   OneSignal.initialize("5126ff04-dfdf-4525-95fd-c6cf3c630acd");
   OneSignal.Notifications.requestPermission(true);
-  var userId = await OneSignal.User.pushSubscription.id;
-  print("AAAAAAAAAAAAAAAAAAAAAAA");
-  print(userId);
   final SharedPreferences sp = await SharedPreferences.getInstance();
   var apiUrl = dotenv.env['API_HTTPS_URL'] ?? "";
   var jwt = sp.getString("jwt") ?? "";
+  OneSignal.login(jwt);
+  var userId = await OneSignal.User.getExternalId();
+  print("EXTERNAL ID : ${userId}");
   var route = Uri.https(apiUrl, "/api/setOneSignalId");
   var apiRes = await http.post(route,
-      body: {'onesignal_id': userId}, headers: {'Authorization': jwt});
-  print("OKKKKKKKKKK ${apiRes.body}");
-
+      body: {'onesignal_id': "userId"}, headers: {'Authorization': jwt});
   runApp(const MyApp());
 }
 
