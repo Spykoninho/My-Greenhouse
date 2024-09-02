@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeData extends StatefulWidget {
@@ -119,13 +120,26 @@ class _HomeDataState extends State<HomeData> {
     235: "Averses de grêle",
   };
 
+  Future<void> initNotif() async {
+    final SharedPreferences sp = await SharedPreferences.getInstance();
+    var apiUrl = dotenv.env['API_HTTPS_URL'] ?? "";
+    var jwt = sp.getString("jwt") ?? "";
+    OneSignal.login(jwt);
+    var userId = await OneSignal.User.getExternalId();
+    print("EXTERNAL ID : ${userId}");
+    var route = Uri.https(apiUrl, "/api/setOneSignalId");
+    var apiRes = await http.post(route,
+        body: {'onesignal_id': userId}, headers: {'Authorization': jwt});
+  }
+
   @override
   void initState() {
     super.initState();
+    initNotif();
     getTodayWeather();
     getAllGreenhouses();
     fetchSharedVars();
-    timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    timer = Timer.periodic(Duration(seconds: 60), (timer) {
       fetchSharedVars();
 
       setState(() {

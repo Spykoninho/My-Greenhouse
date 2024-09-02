@@ -40,7 +40,7 @@ class Greenhouseservice {
             let resUser = await this.user.getMyInfosService(userInfos.id)
             let bodyJson = {
                 app_id: process.env.ONESIGNAL_APP_ID,
-                include_aliases: { external_id: [resUser.onesignal_id] }
+                include_external_user_ids: [resUser.onesignal_id]
             }
             let options = {
                 method: 'POST',
@@ -56,7 +56,8 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_air_humidity", 1, userInfos.id);
                     bodyJson.template_id = 'bfdaacbd-eedb-4c5a-8068-c3fa2edcfc14';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resFetch = await fetch(url, options);
+                    print(resFetch)
                 } else if (humidity < (resUser.max_air_humidity - 1) && humidity > resUser.min_air_humidity) {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
@@ -69,7 +70,7 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
                 if (soil_humidity >= resUser.max_soil_humidity && resUser.notif_soil_humidity == 0) {
-                    // await this.repo.changeNotifStatus("notif_soil_humidity", 1, userInfos.id);
+                    await this.repo.changeNotifStatus("notif_soil_humidity", 1, userInfos.id);
                     bodyJson.template_id = '38925c1b-a7e1-434f-ae8f-9efa46d48ed5';
                     options.body = JSON.stringify(bodyJson)
                     let resNotif = await fetch(url, options);
