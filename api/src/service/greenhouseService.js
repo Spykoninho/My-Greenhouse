@@ -57,7 +57,7 @@ class Greenhouseservice {
                     bodyJson.template_id = 'bfdaacbd-eedb-4c5a-8068-c3fa2edcfc14';
                     options.body = JSON.stringify(bodyJson)
                     let resFetch = await fetch(url, options);
-                    console.log(resFetch)
+                    console.log(await resFetch.json())
                 } else if (humidity < (resUser.max_air_humidity - 1) && humidity > resUser.min_air_humidity) {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
@@ -65,7 +65,8 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_air_humidity", 1, userInfos.id);
                     bodyJson.template_id = 'e188a29c-7433-4718-87e3-f38b98fd9e08';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resFetch = await fetch(url, options);
+                    console.log(await resFetch.json())
                 } else if (humidity > (resUser.min_air_humidity + 1) && humidity < resUser.max_air_humidity) {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
@@ -82,7 +83,8 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_soil_humidity", 1, userInfos.id);
                     bodyJson.template_id = '027bed70-f55f-4f13-803f-ddbb4fea191e';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resFetch = await fetch(url, options);
+                    console.log(await resFetch.json())
                 } else if (soil_humidity > (resUser.min_soil_humidity + 1) && soil_humidity < resUser.max_soil_humidity) {
                     await this.repo.changeNotifStatus("notif_soil_humidity", 0, userInfos.id);
                 }
@@ -90,7 +92,8 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_temperature", 1, userInfos.id);
                     bodyJson.template_id = '157bdcce-6a68-45a5-b41c-9743a3a9ebe1';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resFetch = await fetch(url, options);
+                    console.log(await resFetch.json())
                 } else if (temperature < (resUser.max_temperature - 1) && temperature > resUser.min_temperature) {
                     await this.repo.changeNotifStatus("notif_temperature", 0, userInfos.id);
                 }
@@ -98,7 +101,8 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_temperature", 1, userInfos.id);
                     bodyJson.template_id = '5da04335-5c30-442e-8edb-31e8748f76e9';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resFetch = await fetch(url, options);
+                    console.log(await resFetch.json())
                 } else if (temperature > (resUser.min_temperature + 1) && temperature < resUser.max_temperature) {
                     await this.repo.changeNotifStatus("notif_temperature", 0, userInfos.id);
                 }
