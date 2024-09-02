@@ -57,7 +57,7 @@ class Greenhouseservice {
                     bodyJson.template_id = 'bfdaacbd-eedb-4c5a-8068-c3fa2edcfc14';
                     options.body = JSON.stringify(bodyJson)
                     let resFetch = await fetch(url, options);
-                    print(resFetch)
+                    console.log(resFetch)
                 } else if (humidity < (resUser.max_air_humidity - 1) && humidity > resUser.min_air_humidity) {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
