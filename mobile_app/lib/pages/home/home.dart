@@ -4,6 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_app/pages/allGreenhouse/allGreenhouse.dart';
+import 'package:mobile_app/pages/comingSoon/comingSoon.dart';
 import 'package:mobile_app/pages/home/homeData.dart';
 import 'package:mobile_app/pages/weather/weather.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,8 +21,8 @@ class _HomeState extends State<Home> {
 
   static const List<Widget> pageList = [
     HomeData(),
-    AllGreenhouse(),
-    Weather(),
+    ComingSoon(),
+    ComingSoon(),
   ];
 
   void leaveApp() async {
