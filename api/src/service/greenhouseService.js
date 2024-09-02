@@ -26,14 +26,21 @@ class Greenhouseservice {
             temperature = parseInt(temperature)
             feel_temperature = parseInt(feel_temperature)
             var currentdate = new Date();
-            var datetime = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate() + " " + (currentdate.getHours() + 2) + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds()
+            var month = (currentdate.getMonth() == 12 ? '01' : currentdate.getMonth() + 1)
+            var hours;
+            if (currentdate.getHours() >= 22) {
+                hours = (currentdate.getHours() == 22 ? '00' : '01')
+            } else {
+                hours = currentdate.getHours() + 2
+            }
+            var datetime = currentdate.getFullYear() + "-" + month + "-" + currentdate.getDate() + " " + hours + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds()
             let resDb = await this.repo.saveGreenhouseDataRepo(idGreenhouse, humidity, soil_humidity, temperature, feel_temperature, datetime);
             if (resDb.affectedRows < 1) return { error: "Une erreur est survenue durant la sauvegarde des informations de la serre" }
             const url = 'https://api.onesignal.com/notifications?c=push'
             let resUser = await this.user.getMyInfosService(userInfos.id)
             let bodyJson = {
                 app_id: process.env.ONESIGNAL_APP_ID,
-                included_player_ids: [resUser.onesignal_id]
+                include_aliases: { external_id: [resUser.onesignal_id] }
             }
             let options = {
                 method: 'POST',
@@ -62,10 +69,11 @@ class Greenhouseservice {
                     await this.repo.changeNotifStatus("notif_air_humidity", 0, userInfos.id);
                 }
                 if (soil_humidity >= resUser.max_soil_humidity && resUser.notif_soil_humidity == 0) {
-                    await this.repo.changeNotifStatus("notif_soil_humidity", 1, userInfos.id);
+                    // await this.repo.changeNotifStatus("notif_soil_humidity", 1, userInfos.id);
                     bodyJson.template_id = '38925c1b-a7e1-434f-ae8f-9efa46d48ed5';
                     options.body = JSON.stringify(bodyJson)
-                    await fetch(url, options);
+                    let resNotif = await fetch(url, options);
+                    console.log(await resNotif.json())
                 } else if (soil_humidity < (resUser.max_soil_humidity - 1) && soil_humidity > resUser.min_soil_humidity) {
                     await this.repo.changeNotifStatus("notif_soil_humidity", 0, userInfos.id);
                 }
