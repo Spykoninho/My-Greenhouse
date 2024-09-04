@@ -1,5 +1,5 @@
 # My-Greenhouse
-Mobile application which displays all the information about your greenhouse (temperature, humidity), and which sends you all other important information (weather, etc.). Works with a raspberry pi
+Mobile application which displays all the information about your greenhouse (temperature, feeled temperature, air humidity and soil humidity), and which sends you all other important information (weather, etc.).
 
 ## Summary
 - [How To Install the Project](#how-to-install-the-project)
@@ -12,25 +12,134 @@ Mobile application which displays all the information about your greenhouse (tem
 - [License](#license)
 - [Authors](#authors)
 
+## Products
+Here is the hardware i'm using for the project with the link where i'm buying it :
+- [Mini breadboard](https://fr.aliexpress.com/item/32614008350.html?spm=a2g0o.productlist.0.0.5dd7wwSAwwSAc0&mp=1&gatewayAdapt=glo2fra#nav-specification)
+- [Kit Pi Zero W](https://www.kubii.com/fr/kits-nano-ordinateurs/2077-kit-pi-zero-w-kubii-3272496009509.html)
+- [Arduino Nano Every with headers](https://store.arduino.cc/en-fr/products/arduino-nano-every-with-headers)
+- [DHT 22 sensor](https://fr.aliexpress.com/item/1005005545184001.html?spm=a2g0o.productlist.main.9.7d1dszNGszNGfj&algo_pvid=09bab774-abe0-45ee-97b6-eded12b93e16&utparam-url=scene%3Asearch%7Cquery_from%3A)
+- [Soil humidity](https://fr.aliexpress.com/item/1005004634714711.html?spm=a2g0o.productlist.main.11.78ff7dc2bByJCn&algo_pvid=4061f8f3-bbaf-43a1-b214-98e3392f1209&utparam-url=scene%3Asearch%7Cquery_from%3A)
+- [Usb Conn Cable Type a-Micro B](https://www.amazon.fr/gp/product/B0093LID6K/ref=ewc_pr_img_1?smid=A1X6FK5RDHNB96&psc=1)
+
+Total price : ~ 63.5€ 
+
 ## How To Install the Project
+Here is all the steps to follow which will make your My Greenhouse's box working well !
 
-Firstly, it all depends on whether you intend to use the various components via Docker containers.
+### 1. Hardware Installation
+First, power on your Raspberry with the SD card inside, connect it in HDMI and in USB with a keyboard, configure it, connect it on the wifi and install the updates.
 
-See below for your preferred option. 
-
-Before any install, you need to clone the project
-
+You can put a static ip to connect easily on SSH.
+#### Raspberry Pi Config
+1. go to your Desktop folder : 
+```bash
+ cd Desktop/ 
+ ```
+2. clone the github repo :
 ```bash
 git clone https://github.com/Spykoninho/My-Greenhouse.git
-or via SSH
-git clone git@github.com:Spykoninho/My-Greenhouse.git
 ```
+3. put the env variables : follow the env-example file
+```bash
+sudo nano /etc/environment
+source /etc/environment
+```
+4. exec the file configUsr.sh : (it's possible that it's not recognize the env variable API_IP_HOST at the beginning)
+```bash
+chmod +x ~/Desktop/My-Greenhouse/configUsr.sh
+sudo ./configUsr.sh
+```
+   3. Follow the instructions
 
-### Docker Container
+#### Arduino config
+1. Install the arduino IDE on your computer
+2. Link your arduino on your computer
+3. On your IDE, select 'Arduino Nano Every'
+4. Click YES on the popup.
+5. Accept the download request
+6. Go on the library manager and download the 'DHT sensor library' by Adafruit
+7. Paste the code in [scriptDHT](/scriptDHT.ino)
+8. Verify and upload the code.
 
-A docker-compose file is present at the root of the directory, containing 3 services: the api, the front end and the database. For the API, a Dockerfile is also present to provide the image for building the api.
+#### Connect the Raspberry and the Arduino
+1. Go on your Raspberry, install python3 : 
+```bash
+sudo apt-get install python3
+sudo apt-get install python3-pip
+pip install virtualenv
+```
+2. Create a virtual env
+```bash
+cd ~/Desktop
+virtualenv virtualenv_name
+source venvPython/bin/activate
+```
+3. Install dependancies :
+```bash
+python3 -m pip install requests
+pip install pyserial
+```
+4. Connect the sensors to the arduino:
+   1. DHT
+      1. VCC to 5V
+      2. GND to GND
+      3. DATA to D6
+   2. Humidity sensor
+      1. VCC to 3.3V
+      2. GND to GND
+      3. DATA to A0
+ 
+      Example : 
+![alt](./image_sensor_connection.jpg)
 
-To start containers you can run : 
+#### Print the 3d box
+Go on website like [3denligne.fr](https://3denligne.fr/) and print the two models : 
+- The [box](./mg_boite.stl)
+- The [cover](./mg_couvercle.stl)
+
+Then, put the breadboard, raspberry and sensors inside the box.
+
+#### Start python file at the boot
+create a service :
+```bash
+sudo nano /lib/systemd/system/mygreenhouse.service
+```
+put inside : 
+```bash
+[Unit]
+Description=Send sensor data to db
+After=network.target
+
+
+[Service]
+Type=idle
+Restart=on-failure
+User=root
+ExecStart=/bin/bash -c 'cd /home/YOUR_USERNAME/Desktop/venvPython/ && source venvPython/bin/activate && cd /home/YOUR_USERNAME/Desktop/My-Greenhouse/ && python3 raspArduino.py'
+Environment="JWT=YOUR_JWT"
+Environment="GREENHOUSE_ID=YOUR_GREENHOUSE_ID"
+Environment="API_IP_HOST=YOUR_API_IP_HOST"
+
+[Install]
+WantedBy=multi-user.target
+```
+then
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable mygreenhouse.service
+```
+### 2. API / DB
+I made the choice to store the data and api on a VPS but you can put it in your raspberry with a sqlite for example.
+
+#### Docker
+A docker-compose file is present at the root of the directory, containing 2 services: the api and the database. For the API, a Dockerfile is also present to provide the image for building the api.
+
+Before starting containers, run : 
+```bash
+chmod +x install-build-projects.sh
+./install-build-projects.sh
+```
+then, start the containers : 
 
 ```bash
 docker compose up --build
@@ -46,45 +155,7 @@ docker ps
 The website should normally be accessible at `http://localhost:3000` and the api at `http://localhost:3001`
 (Or the port you specified)
 
-### On your machine (without docker)
-
-First, you need to install the dependencies, then you can use the "start" script with npm at the root of the directory<br>
-Of course, don't forget to replace the .env file in /api with the configuration information for your database.
-
-```bash
-npm install
-Each part need dependencies
-npm run install_libs
-npm start
-```
-
-You can also manually launch the api and the front end separately by executing the following command in each folder `/api` and `/front`
-
-```bash
-npm start
-```
-
-#### Build the React Frontend App
-
-In `/front`
-
-```bash
-npm run build
-```
-
-You will have a `build` folder which is the static site built by React. This static build therefore doesn't need to have the node server running.
-
-The node server for the React application enables the development application to be launched, and it is this application that receives hot updates from React. (See https://webpack.js.org/guides/hot-module-replacement/)
-
 ## Languages and Technologies
-
-### Web application
-#### - Front-End
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
-
-#### - Back-End
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 
 ### Mobile application
 ![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
@@ -94,12 +165,6 @@ The node server for the React application enables the development application to
 
 ### Containerization
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-
-## Run
-### Required 
-- Docker installation with docker compose
-### Commands for developping
-** Run for the first time ** ```docker compose up```
 
 ## License
 

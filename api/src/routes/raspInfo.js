@@ -8,4 +8,6 @@ router.post('/api/saveGreenhouseData', [isLogged], GreenhouseController.saveGree
 
 router.post('/api/addGreenhouse', [isLogged], GreenhouseController.addGreenhouse)
 
+router.get('/api/getMyGreenhouses', [isLogged], GreenhouseController.getMyGreenhouses)
+
 module.exports = router
